@@ -1,0 +1,82 @@
+name: Build and release
+
+# Every push to main builds the site image, pushes it to Harbor, and bumps the image tag
+# in fuzzyos/fuzzyos-config. Argo CD on K1 then rolls it out.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: harbor.sophos.build
+  IMAGE: harbor.sophos.build/fuzzyos/fuzzyos-site
+  CONFIG_REPO: fuzzyos/fuzzyos-config
+  VALUES_FILE: fuzzyos-site/helm-charts/fuzzyos-site/values-prod.yaml
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+
+      - name: Compute version
+        id: version
+        run: echo "tag=1.0.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.version.outputs.tag }}
+            ${{ env.IMAGE }}:latest
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Check out GitOps config
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.CONFIG_REPO }}
+          token: ${{ secrets.FUZZYOS_CONFIG_TOKEN }}
+          path: config
+
+      - name: Bump image tag
+        working-directory: config
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          sed -i -E "/^image:/,/^[^ ]/ s/^(  tag: ).*/\1\"${TAG}\"/" "$VALUES_FILE"
+          grep -A2 '^image:' "$VALUES_FILE"
+          if git diff --quiet; then
+            echo "Tag already ${TAG}; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "fuzzyos-site: release ${TAG} (${GITHUB_SHA::7})"
+          git push
