@@ -1,4 +1,4 @@
-# FuzzyOS Web
+# FuzzyOS Site
 
 The marketing website for [fuzzy-code](https://github.com/fuzzyos/fuzzy-code) — a minimal terminal coding harness built by FuzzyOS.
 
