@@ -1,4 +1,5 @@
 import { Box, Container, Flex, Grid, Heading, Text, Card, Section, Separator, Code } from "@radix-ui/themes";
+import CopyCode from "@/components/CopyCode";
 import {
   RocketIcon,
   LightningBoltIcon,
@@ -8,7 +9,12 @@ import {
   GlobeIcon,
   GitHubLogoIcon,
   DesktopIcon,
-  CheckCircledIcon
+  CheckCircledIcon,
+  LaptopIcon,
+  ChatBubbleIcon,
+  CursorTextIcon,
+  ExternalLinkIcon,
+  MixerHorizontalIcon
 } from "@radix-ui/react-icons";
 
 export default function Home() {
@@ -26,9 +32,7 @@ export default function Home() {
               TypeScript Extensions, Skills, Prompt Templates, and Themes. Supports 20+ AI providers.
             </Text>
             <Box>
-              <Code size="4" style={{ padding: "12px 24px", display: "block" }}>
-                npm install -g @fuzzyos/fuzzy-code
-              </Code>
+              <CopyCode text="npm install -g @fuzzyos/fuzzy-code" />
             </Box>
             <Text size="3" color="gray">
               Then run <Code>fuzzy</Code> and start coding.
@@ -151,6 +155,93 @@ export default function Home() {
                 </Flex>
               </Card>
             </Grid>
+          </Flex>
+        </Container>
+      </Section>
+
+      <Separator size="4" />
+
+      {/* VS Code Extension Section */}
+      <Section id="vscode" size="3" style={{ backgroundColor: "var(--accent-2)" }}>
+        <Container size="4">
+          <Flex direction="column" gap="8">
+            <Flex direction="column" gap="4" align="center">
+              <Heading size="8" align="center">VS Code Extension</Heading>
+              <Text size="4" color="gray" align="center" style={{ maxWidth: "800px" }}>
+                Harness the power of Fuzzy Code without leaving your IDE. No separate install required
+                — the CLI is bundled inside the extension.
+              </Text>
+            </Flex>
+
+            <Grid columns={{ initial: "1", md: "3" }} gap="6">
+              <Card>
+                <Flex direction="column" gap="3">
+                  <Flex align="center" gap="3">
+                    <ChatBubbleIcon width="24" height="24" />
+                    <Heading size="5">Sidebar Panel</Heading>
+                  </Flex>
+                  <Text size="3" color="gray">
+                    A chat interface accessible directly from the VS Code activity bar for quick
+                    access to Fuzzy. Open multiple independent sessions as editor tabs.
+                  </Text>
+                </Flex>
+              </Card>
+
+              <Card>
+                <Flex direction="column" gap="3">
+                  <Flex align="center" gap="3">
+                    <CursorTextIcon width="24" height="24" />
+                    <Heading size="5">Automatic Context</Heading>
+                  </Flex>
+                  <Text size="3" color="gray">
+                    Your active file automatically attaches as context with each message. Select
+                    specific text to send only that portion, with line indicators showing what&apos;s active.
+                  </Text>
+                </Flex>
+              </Card>
+
+              <Card>
+                <Flex direction="column" gap="3">
+                  <Flex align="center" gap="3">
+                    <MixerHorizontalIcon width="24" height="24" />
+                    <Heading size="5">Native Integration</Heading>
+                  </Flex>
+                  <Text size="3" color="gray">
+                    Confirmations, quick picks, and input boxes use VS Code&apos;s built-in native UI
+                    components. Launch Fuzzy in an integrated terminal for full terminal UI access.
+                  </Text>
+                </Flex>
+              </Card>
+            </Grid>
+
+            <Flex direction="column" align="center" gap="3">
+              <a
+                href="https://marketplace.visualstudio.com/items?itemName=fuzzyos.fuzzy-code"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Code size="4" style={{ padding: "12px 24px", display: "block", cursor: "pointer" }}>
+                  <Flex align="center" gap="2">
+                    <LaptopIcon width="18" height="18" />
+                    Install from Marketplace
+                    <ExternalLinkIcon width="14" height="14" />
+                  </Flex>
+                </Code>
+              </a>
+              <a
+                href="https://github.com/fuzzyos/fuzzy-code-vsce"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Code size="4" style={{ padding: "12px 24px", display: "block", cursor: "pointer" }}>
+                  <Flex align="center" gap="2">
+                    <GitHubLogoIcon width="18" height="18" />
+                    Source Code
+                    <ExternalLinkIcon width="14" height="14" />
+                  </Flex>
+                </Code>
+              </a>
+            </Flex>
           </Flex>
         </Container>
       </Section>

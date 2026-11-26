@@ -41,6 +41,9 @@ export default function Footer() {
                 <Link href="/#features">
                   <Text size="2" style={{ cursor: "pointer" }} color="gray">Features</Text>
                 </Link>
+                <Link href="/#vscode">
+                  <Text size="2" style={{ cursor: "pointer" }} color="gray">VS Code Extension</Text>
+                </Link>
                 <Link href="/#philosophy">
                   <Text size="2" style={{ cursor: "pointer" }} color="gray">Philosophy</Text>
                 </Link>

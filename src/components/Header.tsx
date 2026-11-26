@@ -58,6 +58,11 @@ export default function Header() {
                 Features
               </Text>
             </Link>
+            <Link href="/#vscode">
+              <Text size="3" weight="medium" style={{ cursor: "pointer" }}>
+                VS Code Extension
+              </Text>
+            </Link>
             <Link href="/#philosophy">
               <Text size="3" weight="medium" style={{ cursor: "pointer" }}>
                 Philosophy
